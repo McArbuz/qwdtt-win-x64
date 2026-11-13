@@ -3,9 +3,10 @@
 Если кратко, от человека:
 
 Win x64 клиент под qwdtt. Деплой доступен только с приложения на телефон, RAW подключение не перенесено.
+
 Качаем https://www.wireguard.com/install/?spm=a2ty_o01.29997173.0.0.6e26c921Peecls
+
 Качаем https://go.dev/doc/install ~1.27
-Панель в qwdtt-win-x64\go_client файл называется qwdtt-panel.exe
 
 Установка: , пошагово.
 ```powershell
@@ -33,7 +34,7 @@ go mod tidy
 go build -trimpath -ldflags "-s -w -H windowsgui" -o qwdtt-panel.exe .
 ```
 перенесите файл qwdtt-panel.exe в qwdtt-win-x64\go_client (Реком.), или укажите в панели адрес к нему
-
+Панель в qwdtt-win-x64\go_client файл называется "qwdtt-panel.exe"
 Запустите qwdtt-panel.exe от имени адм.
 
 
