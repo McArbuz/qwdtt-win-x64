@@ -9,9 +9,8 @@ Win x64 клиент под qwdtt. Деплой доступен только с
 
 Установка: , пошагово.
 ```powershell
-
 git clone https://github.com/McArbuz/qwdtt-win-x64.git
-
+```
 ```powershell
 cd ваш-путь/qwdtt-win-x64
 ```
@@ -21,16 +20,16 @@ cd go_client
 ```powershell
 go mod tidy   # обязательно: обновляет go.sum (иначе "missing go.sum entry")
 ```
-```
+```powershell
 go build -trimpath -ldflags="-checklinkname=0 -s -w" -o qwdtt.exe .
 ```
-```
+```powershell
 cd qwdtt-win-x64\panel
 ```
-```
+```powershell
 go mod tidy
 ```
-```
+```powershell
 go build -trimpath -ldflags "-s -w -H windowsgui" -o qwdtt-panel.exe .
 ```
 перенесите файл qwdtt-panel.exe в qwdtt-win-x64\go_client (Реком.), или укажите в панели адрес к нему
