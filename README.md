@@ -12,13 +12,13 @@ Win x64 клиент под qwdtt. Деплой доступен только с
 
 git clone https://github.com/McArbuz/qwdtt-win-x64.git
 
-```
+```powershell
 cd ваш-путь/qwdtt-win-x64
 ```
-```
+```powershell
 cd go_client
 ```
-```
+```powershell
 go mod tidy   # обязательно: обновляет go.sum (иначе "missing go.sum entry")
 ```
 ```
