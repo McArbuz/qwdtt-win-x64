@@ -1,57 +1,138 @@
-# ===== Gradle =====
-.gradle/
-build/
-local.properties
+# ============================================================
+#  qWDTT for Windows — .gitignore
+#  Правило: секреты и бинарники — никогда в репозиторий.
+#  go.mod, go.sum и gradle-wrapper.jar — наоборот, коммитим обязательно.
+# ============================================================
 
-# ===== Android =====
+# ---------- СЕКРЕТЫ И ЛОКАЛЬНЫЕ КОНФИГИ ----------
+settings.json
+profiles.json
+vk-login.json
+vk-cookies*.json
+cookies*.json
+*.qwdtt
+.env
+.env.*
+!.env.example
+
+# WireGuard-конфиги содержат ПРИВАТНЫЙ КЛЮЧ
+*.conf
+!*.example.conf
+
+# ключи, подписи, хранилища
+*.key
+*.pem
+privatekey*
+publickey
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+
+# ---------- ЛОГИ, ДАМПЫ, ОТЛАДКА ----------
+*.log
+logs/
+panel-crash.log
+crash*.log
+*.dump
+*.pcap
+*.pcapng
+*.har
+*.prof
+
+# ---------- БИНАРНИКИ И РЕЗУЛЬТАТЫ СБОРКИ ----------
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.a
+*.aar
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.syso
+# если хранишь манифест/иконку как .syso — раскомментируй:
+# !build/windows/*.syso
+*.test
+*.out
+bin/
+out/
+dist/
+release/
+releases/
+build/bin/
+panel/build/
+go_client/build/
+
+# ---------- GO ----------
+vendor/
+go.work
+go.work.sum
+__debug_bin*
+
+# ---------- NODE / FRONTEND (если появится) ----------
+node_modules/
+.npm/
+.pnpm-store/
+.vite/
+.eslintcache
+npm-debug.log*
+yarn-error.log*
+
+# ---------- ANDROID / GRADLE (часть апстрима qWDTT) ----------
+.gradle/
+/build/
+app/build/
+app/libs/*.aar
+local.properties
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
 *.apk
 *.aab
 *.ap_
 *.dex
 *.class
-app/build/
-app/release/
 
-# ===== Go =====
-go.sum
-
-# ===== Native Libraries (compiled) =====
-*.so
-*.dll
-*.dylib
-jniLibs/
-app/src/main/jniLibs/
-
-# ===== Server binary =====
-app/src/main/assets/server
-
-# ===== Keystore / Secrets =====
-*.keystore
-*.jks
-*.key
-*.pem
-
-# ===== IDE =====
+# ---------- IDE / РЕДАКТОРЫ ----------
 .idea/
-*.iml
 .vscode/
 *.swp
 *.swo
 *~
+*.sublime-workspace
 
-# ===== OS =====
-.DS_Store
+# ---------- WINDOWS / ONEDRIVE / МУСОР ----------
 Thumbs.db
-Desktop.ini
-
-# ===== Misc =====
-*.log
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+.DS_Store
 *.tmp
+*.temp
 *.bak
-msg.txt
-*.bat
-wdtt-server
-wg-turn-client
-.kotlin/
-.keys/
-.gradle-home/
+*.old
+*.orig
+*.rej
+*.zip
+*.7z
+*.rar
+*.tar.gz
+
+# ---------- ЛИЧНЫЕ ЗАМЕТКИ ----------
+local/
+private/
+secrets/
+*.local.md
+
+# локальные запускатели с паролями и хешами
+start-qwdtt*.bat
+start*.bat
+run*.bat
+*.bat.local
+# экспорты доступов/ссылок
+Доступ*.txt
+access*.txt
+link*.txt

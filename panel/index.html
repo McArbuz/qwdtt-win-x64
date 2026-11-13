@@ -1,0 +1,313 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>qWDTT • PC</title>
+<style>
+:root{
+--bg:#080B16;--bg2:#0D1224;--card:#131A30;--card2:#1B2340;--track:#0F1528;
+--tx:#E9EEFB;--mut:#8E9BC4;--bd:#28325A;
+--acc:#4F8CFF;--acc2:#7C5CFF;--cyan:#22D3EE;--ok:#34D399;--warn:#F5A623;--err:#FF5C6C;--mag:#F472B6}
+body.light{--bg:#EEF2FA;--bg2:#E4EAF7;--card:#FFFFFF;--card2:#F3F6FD;--track:#E7ECF7;
+--tx:#141B33;--mut:#5F6C93;--bd:#D8E0F2}
+*{box-sizing:border-box}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-track{background:var(--track);border-radius:10px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--acc),var(--acc2));border-radius:10px;border:2px solid var(--track)}
+*::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--cyan),var(--acc2))}
+*{scrollbar-width:thin;scrollbar-color:var(--acc2) var(--track)}
+html,body{height:100%}
+body{margin:0;font-family:Segoe UI,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);position:relative;overflow-x:hidden;transition:background .4s,color .4s}
+body::before{content:"";position:fixed;inset:-20%;z-index:-2;pointer-events:none;
+background:radial-gradient(46% 38% at 12% 8%,rgba(124,92,255,.30),transparent 62%),radial-gradient(40% 34% at 88% 12%,rgba(34,211,238,.20),transparent 64%),radial-gradient(52% 44% at 72% 92%,rgba(79,140,255,.24),transparent 66%),radial-gradient(38% 32% at 22% 88%,rgba(244,114,182,.14),transparent 66%);
+filter:blur(14px);animation:drift 26s ease-in-out infinite alternate}
+body.light::before{opacity:.5}
+@keyframes drift{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-2%,2%,0) scale(1.06)}}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='.85' numOctaves='3'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>")}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 40px}
+header{display:flex;align-items:center;gap:14px;margin-bottom:18px;animation:rise .5s both}
+.logo{font-size:23px;font-weight:800;letter-spacing:-.4px;background:linear-gradient(96deg,var(--cyan),var(--acc) 42%,var(--acc2) 72%,var(--mag));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo small{display:block;font-size:10px;letter-spacing:2.4px;font-weight:600;color:var(--mut);-webkit-text-fill-color:var(--mut);margin-top:2px}
+.pill{margin-left:auto;display:flex;align-items:center;gap:9px;background:color-mix(in srgb,var(--card) 82%,transparent);border:1px solid var(--bd);padding:8px 15px;border-radius:30px;font-size:13px;backdrop-filter:blur(8px)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mut);flex:none}
+.dot.on{background:var(--ok);box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 1.7s infinite}
+.dot.starting,.dot.tunnel,.dot.restarting{background:var(--warn);animation:pulse 1s infinite}
+.dot.error{background:var(--err)}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+.iconbtn{cursor:pointer;background:var(--card);border:1px solid var(--bd);color:var(--tx);border-radius:11px;padding:8px 12px;font-size:15px;transition:.18s}
+.iconbtn:hover{transform:translateY(-2px);border-color:var(--acc);box-shadow:0 6px 18px -8px var(--acc)}
+.grid{display:grid;grid-template-columns:308px 1fr;gap:16px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--bd);border-radius:18px;padding:17px;backdrop-filter:blur(10px);box-shadow:0 20px 44px -30px rgba(0,0,0,.9);animation:rise .55s both}
+.card:nth-child(2){animation-delay:.06s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h3{margin:0 0 13px;font-size:11.5px;color:var(--mut);text-transform:uppercase;letter-spacing:1.4px;font-weight:700}
+.plist{display:flex;flex-direction:column;gap:8px;max-height:288px;overflow:auto;padding-right:4px}
+.pitem{padding:11px 12px;border-radius:12px;background:var(--card2);cursor:pointer;border:1px solid transparent;display:flex;justify-content:space-between;align-items:center;gap:8px;transition:.16s}
+.pitem:hover{border-color:var(--acc);transform:translateX(2px)}
+.pitem.sel{border-color:var(--acc);background:linear-gradient(100deg,rgba(79,140,255,.20),rgba(124,92,255,.10))}
+.pitem.blocked{opacity:.5;cursor:not-allowed}
+.pitem.blocked:hover{transform:none;border-color:transparent}
+.pitem b{font-weight:600;font-size:13.5px;display:block}
+.pitem small{color:var(--mut);font-size:11px;font-family:Consolas,monospace}
+.live{font-size:9px;font-weight:800;letter-spacing:.8px;color:#04150F;background:var(--ok);padding:2px 6px;border-radius:20px}
+.del{color:var(--err);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:6px}
+.del:hover{background:rgba(255,92,108,.14)}
+label{display:block;font-size:11.5px;color:var(--mut);margin:11px 0 5px;font-weight:600;letter-spacing:.2px}
+input,select,textarea{width:100%;background:var(--card2);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:9px 11px;font-size:13px;font-family:inherit;transition:.16s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(79,140,255,.16)}
+textarea{resize:vertical;min-height:56px;font-family:Consolas,monospace;font-size:12px}
+input[type=range]{padding:0;height:26px;background:transparent;border:none;accent-color:var(--acc)}
+input[type=range]:focus{box-shadow:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--bd);background:var(--card2);color:var(--tx);cursor:pointer;font-size:12.5px;font-weight:600;transition:.16s}
+.seg button:hover:not(:disabled){border-color:var(--acc)}
+.seg button.act{background:linear-gradient(100deg,var(--acc),var(--acc2));border-color:transparent;color:#fff;box-shadow:0 8px 20px -12px var(--acc2)}
+.sw{display:flex;align-items:center;gap:9px;margin-top:11px;font-size:12.5px}.sw input{width:16px;height:16px;accent-color:var(--acc)}
+.is-locked input,.is-locked textarea,.is-locked select,.is-locked .seg button,.is-locked .btn{opacity:.5;cursor:not-allowed}
+.lockbar{display:none;align-items:center;gap:9px;background:linear-gradient(100deg,rgba(245,166,35,.18),rgba(244,114,182,.10));border:1px solid var(--warn);color:var(--warn);padding:9px 12px;border-radius:11px;font-size:12px;margin-bottom:12px;font-weight:600}
+.big{width:100%;margin-top:17px;padding:15px;border:none;border-radius:14px;font-size:15.5px;font-weight:700;letter-spacing:.3px;cursor:pointer;color:#fff;background:linear-gradient(96deg,var(--acc),var(--acc2),var(--cyan),var(--acc));background-size:280% 100%;animation:grad 7s linear infinite;transition:transform .16s,box-shadow .16s;box-shadow:0 16px 34px -20px var(--acc2)}
+.big:hover{transform:translateY(-2px);box-shadow:0 22px 42px -20px var(--acc2)}
+.big.stop{background:linear-gradient(96deg,var(--err),#FF8A5C,var(--mag),var(--err));background-size:280% 100%}
+@keyframes grad{0%{background-position:0 0}100%{background-position:280% 0}}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+@media(max-width:620px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--card2);border:1px solid var(--bd);border-radius:14px;padding:12px 10px;text-align:center;position:relative;overflow:hidden}
+.tile::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--cyan))}
+.tile.g::after{background:linear-gradient(90deg,var(--ok),var(--cyan))}
+.tile.m::after{background:linear-gradient(90deg,var(--mag),var(--acc2))}
+.tile.a::after{background:linear-gradient(90deg,var(--warn),var(--mag))}
+.tile b{display:block;font-size:19px;margin-top:5px;font-variant-numeric:tabular-nums;font-weight:700}
+.tile span{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.7px;font-weight:600}
+.tile i{display:block;font-style:normal;font-size:10px;color:var(--cyan);margin-top:2px;font-weight:600}
+.spark{margin-top:10px;background:var(--card2);border:1px solid var(--bd);border-radius:14px;padding:8px 10px}
+.spark canvas{display:block;width:100%;height:52px}
+.steps{margin-top:16px;display:flex;flex-direction:column;gap:6px}
+.step{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:11px;background:var(--card2);font-size:12.5px;color:var(--mut);border:1px solid transparent;transition:.2s}
+.step .ic{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;background:var(--bd);color:var(--mut);flex:none;font-weight:800}
+.step.done{color:var(--tx);border-color:rgba(52,211,153,.3)}
+.step.done .ic{background:var(--ok);color:#04150F}
+.step.act{color:var(--tx);border-color:rgba(245,166,35,.35)}
+.step.act .ic{background:var(--warn);color:#231400;animation:pulse 1.1s infinite}
+.step.fail{color:var(--err);border-color:rgba(255,92,108,.4)}
+.step.fail .ic{background:var(--err);color:#fff}
+.btn{padding:9px 13px;border-radius:10px;border:1px solid var(--bd);background:var(--card2);color:var(--tx);cursor:pointer;font-size:12.5px;font-weight:600;transition:.16s}
+.btn:hover:not(:disabled){border-color:var(--acc);transform:translateY(-1px)}
+.btn:disabled{cursor:not-allowed}
+.logs{margin-top:9px;background:#060912;border:1px solid var(--bd);border-radius:14px;height:210px;overflow:auto;padding:11px;font-family:Consolas,monospace;font-size:11.5px;color:#9FB0D6;line-height:1.5}
+.logs div{white-space:pre-wrap;word-break:break-all;animation:fade .22s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.logs .err{color:#FF8A94}.logs .ok{color:#7FE3A3}
+.banner{background:rgba(245,166,35,.14);border:1px solid var(--warn);color:var(--warn);padding:11px 13px;border-radius:12px;margin-bottom:14px;font-size:12.5px;font-weight:600}
+details{margin-top:16px}summary{cursor:pointer;color:var(--mut);font-size:12.5px;font-weight:600;padding:6px 0}
+.modal{position:fixed;inset:0;background:rgba(4,7,16,.72);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:60}
+.modal.show{display:flex}
+.mbox{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:23px;max-width:470px;width:92%;animation:rise .3s}
+#toasts{position:fixed;right:18px;bottom:18px;z-index:80;display:flex;flex-direction:column;gap:9px;max-width:340px}
+.toast{background:var(--card);border:1px solid var(--bd);border-left:3px solid var(--acc);border-radius:12px;padding:11px 14px;font-size:12.5px;box-shadow:0 18px 40px -20px #000;animation:slide .28s}
+.toast.warn{border-left-color:var(--warn)}.toast.ok{border-left-color:var(--ok)}.toast.err{border-left-color:var(--err)}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+</style></head><body>
+<div class="wrap">
+<header><div class="logo">qWDTT • PC<small>TURN TUNNEL CONSOLE</small></div>
+<div class="pill"><span class="dot" id="dot"></span><span id="stxt">выключено</span></div>
+<button class="iconbtn" id="theme" title="Тема">🌙</button>
+<button class="iconbtn" id="quit" title="Выход">⏻</button></header>
+<div id="admin" class="banner" style="display:none">⚠ Запусти панель <b>от имени администратора</b>.</div>
+<div id="warn" class="banner" style="display:none"></div>
+<div class="grid">
+<div><div class="card"><h3>Профили</h3><div class="plist" id="plist"></div>
+<button class="btn" style="width:100%;margin-top:11px" id="new">＋ Новый профиль</button>
+<label>Импорт ссылки qwdtt://</label><textarea id="imp" placeholder="qwdtt://config?..."></textarea>
+<button class="btn" style="width:100%;margin-top:8px" id="impbtn">Импортировать</button></div></div>
+<div><div class="card" id="editor"><h3>Настройки подключения</h3>
+<div class="lockbar" id="lockbar">🔒 Параметры заблокированы — подключение активно. Новый профиль создать можно.</div>
+<label>Название</label><input id="f_name">
+<div class="row"><div><label>Сервер (peer)</label><input id="f_peer" placeholder="IP:56000"></div><div><label>Пароль</label><input id="f_pass"></div></div>
+<label>Хеши звонков VK (через запятую)</label><textarea id="f_hashes"></textarea>
+<div class="row"><div><label>Потоки: <b id="w_val">9</b> <span id="w_hint" style="opacity:.65;font-weight:400"></span></label><input id="f_workers" type="range" min="9" max="108" step="9" value="9" oninput="document.getElementById('w_val').textContent=this.value"></div>
+<div><label>Локальный порт</label><input id="f_port" type="number" value="9000"></div></div>
+<label>Маскировка трафика</label><div class="seg" id="obfs"><button data-v="audio">🎵 Аудио</button><button data-v="video">🎬 Видео</button></div>
+<div class="row"><div><label>DNS для VK</label><select id="f_dns"><option value="yandex">Яндекс</option><option value="google">Google</option><option value="cloudflare">Cloudflare</option><option value="doh-yandex">DoH Яндекс</option><option value="doh-google">DoH Google</option><option value="doh-cloudflare">DoH Cloudflare</option></select></div>
+<div><label>Device ID</label><input id="f_device" value="kot-pc"></div></div>
+<div class="sw"><input type="checkbox" id="f_tcp" checked><label style="margin:0">TURN принудительно по TCP</label></div>
+<label>Авторизация VK</label><div class="seg" id="vkauth"><button data-v="anonymous">Аноним</button><button data-v="account">Аккаунт</button></div>
+<div style="margin-top:9px"><button class="btn" id="vklogin">🔑 Войти в VK</button></div>
+<div class="sw"><input type="checkbox" id="f_notls"><label style="margin:0">Прямой режим без DTLS (-notls)</label></div>
+<button class="big" id="go">Подключить</button>
+<div class="steps" id="steps"></div>
+<div class="tiles">
+<div class="tile g"><span>потоков</span><b id="t_act">0</b><i id="t_target">—</i></div>
+<div class="tile"><span>скорость МБ/с</span><b id="t_sp">0.00</b><i>&nbsp;</i></div>
+<div class="tile m"><span>принято МБ</span><b id="t_rx">0.00</b><i>&nbsp;</i></div>
+<div class="tile a"><span>отправлено МБ</span><b id="t_tx">0.00</b><i>&nbsp;</i></div>
+</div>
+<div class="spark"><canvas id="spark"></canvas></div>
+<div style="margin-top:11px;display:flex;gap:8px"><button class="btn" id="save">💾 Сохранить</button><button class="btn" id="exp">🔗 Экспорт ссылки</button></div>
+</div>
+<details><summary>⚙ Общие настройки (пути, обход VK)</summary><div class="card" style="margin-top:10px">
+<label>Путь к qwdtt.exe</label><input id="s_core"><label>Путь к wireguard.exe</label><input id="s_wg">
+<label>Сети обхода VK (CIDR)</label><textarea id="s_byp"></textarea>
+<button class="btn" style="margin-top:11px" id="s_save">Сохранить настройки</button></div></details>
+<div style="display:flex;align-items:center;gap:9px;margin-top:16px"><span style="font-size:11.5px;color:var(--mut);font-weight:600;letter-spacing:.6px">УРОВЕНЬ ЛОГОВ</span>
+<select id="loglvl" style="width:auto"><option>Trace</option><option>Debug</option><option selected>Info</option><option>Warn</option><option>Error</option></select></div>
+<div class="logs" id="logs"></div></div>
+</div></div>
+<div class="modal" id="cap"><div class="mbox">
+<h3 style="color:var(--warn)">VK просит капчу</h3>
+<p style="font-size:12.5px;color:var(--mut)">Капча открылась в окне VK. Реши её — токен уйдёт ядру автоматически. Если нет, вставь токен вручную:</p>
+<input id="cap_in" placeholder="success_token">
+<div style="display:flex;gap:8px;margin-top:13px"><button class="btn" id="cap_send" style="flex:1">Отправить ядру</button><button class="btn" id="cap_open">Открыть ещё раз</button></div>
+</div></div>
+<div id="toasts"></div>
+<script>
+const $=id=>document.getElementById(id);
+const api=(p,b)=>fetch(p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b||{})}).then(r=>r.json());
+let S={profiles:[],settings:{}},sel=null,obfs="audio",vkAuth="anonymous",myGen=null,dead=false,draft=false;
+let es=null,tickTimer=null,beatTimer=null,spark=[],lastStatus="off";
+const STEPS=["Креды VK","TURN-соединение","DTLS и авторизация","Конфиг WireGuard","Туннель Windows"];
+const TXT={off:"выключено",starting:"запуск мотора…",tunnel:"поднимаю WireGuard…",on:"подключено",restarting:"перезапуск…",error:"ошибка"};
+const LV={Trace:0,Debug:1,Info:2,Warn:3,Error:4};
+const FIELDS=["f_name","f_peer","f_pass","f_hashes","f_workers","f_port","f_dns","f_device","f_tcp","f_notls"];
+
+function toast(msg,type){const d=document.createElement("div");d.className="toast "+(type||"");d.textContent=msg;$("toasts").appendChild(d);
+ setTimeout(()=>{d.style.transition="opacity .3s,transform .3s";d.style.opacity="0";d.style.transform="translateX(24px)";setTimeout(()=>d.remove(),320);},3600);}
+function isRunning(){return S.status&&S.status!=="off"&&S.status!=="error";}
+function lockedNow(){return isRunning()&&sel===S.current;}
+function theme(t){document.body.classList.toggle("light",t==="light");$("theme").textContent=t==="light"?"☀":"🌙";}
+function setLocked(on){
+ FIELDS.forEach(id=>{const e=$(id);if(e)e.disabled=on;});
+ [...$("obfs").children,...$("vkauth").children].forEach(b=>b.disabled=on);
+ $("vklogin").disabled=on;$("save").disabled=on;
+ $("lockbar").style.display=on?"flex":"none";
+ $("editor").classList.toggle("is-locked",on);
+}
+function applyWorkersMode(){
+ const w=$("f_workers");
+ if(vkAuth==="account"){w.min=1;w.max=4;w.step=1;let v=+w.value||4;if(v>4)v=4;if(v<1)v=1;w.value=v;$("w_hint").textContent="— аккаунт: 1–4";}
+ else{w.min=9;w.max=108;w.step=9;let v=Math.round((+w.value||9)/9)*9;if(v<9)v=9;if(v>108)v=108;w.value=v;$("w_hint").textContent="— аноним: 9–108, шаг 9";}
+ $("w_val").textContent=w.value;
+}
+function setObfs(v){obfs=v;[...$("obfs").children].forEach(b=>b.classList.toggle("act",b.dataset.v===v));}
+function setVk(v){vkAuth=v;[...$("vkauth").children].forEach(b=>b.classList.toggle("act",b.dataset.v===v));applyWorkersMode();}
+function loadEditor(p){
+ $("f_name").value=p.name||"";$("f_peer").value=p.peer||"";$("f_pass").value=p.pass||"";$("f_hashes").value=p.hashes||"";
+ $("f_workers").value=p.workers||9;$("f_port").value=p.port||9000;$("f_dns").value=p.dns||"yandex";$("f_device").value=p.deviceId||"kot-pc";
+ $("f_tcp").checked=p.turnTcp!==false;$("f_notls").checked=!!p.noDtls;setObfs(p.obfs||"audio");setVk(p.vkAuth||"anonymous");
+ $("f_workers").value=p.workers||9;applyWorkersMode();
+}
+function readEditor(){return{id:sel||"",name:$("f_name").value,peer:$("f_peer").value,pass:$("f_pass").value,hashes:$("f_hashes").value,
+ workers:+$("f_workers").value||9,port:+$("f_port").value||9000,obfs,vkAuth,dns:$("f_dns").value,deviceId:$("f_device").value,
+ turnTcp:$("f_tcp").checked,noDtls:$("f_notls").checked};}
+function renderList(){
+ const run=isRunning();$("plist").innerHTML="";
+ S.profiles.forEach(p=>{
+  const active=p.id===S.current&&run, blocked=run&&p.id!==sel&&!draft&&p.id!==S.current;
+  const d=document.createElement("div");d.className="pitem"+(p.id===sel?" sel":"")+(blocked?" blocked":"");
+  d.innerHTML='<div style="min-width:0"><b></b><small></small></div><div style="display:flex;align-items:center;gap:6px">'+(active?'<span class="live">LIVE</span>':'')+'<span class="del">✕</span></div>';
+  d.querySelector("b").textContent=p.name||"Без имени";d.querySelector("small").textContent=p.peer||"";
+  d.onclick=e=>{
+   if(e.target.className==="del"){
+    if(active){toast("Нельзя удалить профиль активного подключения.","warn");return;}
+    api("/api/delete",{id:p.id}).then(()=>{if(sel===p.id)sel=null;toast("Профиль удалён.","ok");});return;
+   }
+   if(run&&p.id!==sel){toast("Переключение профилей запрещено при активном подключении.","warn");return;}
+   sel=p.id;draft=false;loadEditor(p);renderList();setLocked(lockedNow());
+  };
+  $("plist").appendChild(d);
+ });
+}
+function renderSteps(s){
+ const box=$("steps");box.innerHTML="";const run=s.status&&s.status!=="off";
+ STEPS.forEach((name,i)=>{const d=document.createElement("div");let cls="step",ic="○";
+  if(s.failedAt===i){cls+=" fail";ic="✕";}else if(i<s.stage){cls+=" done";ic="✓";}else if(i===s.stage&&run){cls+=" act";ic="●";}
+  d.className=cls;d.innerHTML='<span class="ic">'+ic+'</span>'+name;box.appendChild(d);});
+}
+function drawSpark(){
+ const c=$("spark"),dpr=Math.min(devicePixelRatio||1,2),w=c.clientWidth||600,h=52;
+ c.width=w*dpr;c.height=h*dpr;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);
+ const cs=getComputedStyle(document.body),acc=cs.getPropertyValue("--acc").trim()||"#4F8CFF",cy=cs.getPropertyValue("--cyan").trim()||"#22D3EE";
+ x.strokeStyle="rgba(140,155,196,.16)";x.lineWidth=1;
+ for(let i=1;i<4;i++){const y=h*i/4;x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke();}
+ if(spark.length<2)return;
+ const max=Math.max(0.05,...spark),n=spark.length,px=i=>i*(w/(Math.max(n-1,1))),py=v=>h-4-(v/max)*(h-10);
+ const g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,acc);g.addColorStop(1,cy);
+ x.beginPath();x.moveTo(px(0),py(spark[0]));for(let i=1;i<n;i++)x.lineTo(px(i),py(spark[i]));
+ x.lineTo(px(n-1),h);x.lineTo(px(0),h);x.closePath();
+ const fg=x.createLinearGradient(0,0,0,h);fg.addColorStop(0,"rgba(79,140,255,.34)");fg.addColorStop(1,"rgba(34,211,238,0)");
+ x.fillStyle=fg;x.fill();
+ x.beginPath();x.moveTo(px(0),py(spark[0]));for(let i=1;i<n;i++)x.lineTo(px(i),py(spark[i]));
+ x.strokeStyle=g;x.lineWidth=2;x.lineJoin="round";x.stroke();
+ x.fillStyle=cy;x.beginPath();x.arc(px(n-1),py(spark[n-1]),3,0,7);x.fill();
+}
+function showClosed(){
+ if(dead)return;dead=true;
+ try{clearInterval(tickTimer);}catch(e){}
+ try{clearInterval(beatTimer);}catch(e){}
+ try{es&&es.close();}catch(e){}
+ try{window.open('','_self');window.close();}catch(e){}
+ document.title="qWDTT закрыт";
+ document.body.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#080B16;color:#E9EEFB;font-family:Segoe UI,system-ui,sans-serif"><div style="text-align:center"><div style="font-size:58px">⏻</div><h1 style="margin:14px 0 8px;font-size:27px;background:linear-gradient(96deg,#22D3EE,#7C5CFF);-webkit-background-clip:text;background-clip:text;color:transparent">qWDTT закрыт</h1><p style="color:#8E9BC4;margin:0">Панель завершена. Эту вкладку можно закрыть.</p></div></div>';
+}
+function lvl(l){
+ if(/ошибка|error|failed|fatal|timeout|не удалось|не перешла/i.test(l))return 4;
+ if(/капча|captcha|warn|quota|квота|перезапуск|retry/i.test(l))return 3;
+ if(/\[ДЕБАГ\]/.test(l))return 1;
+ if(/Identity|step\d|rotated|fingerprint|\[STREAM/.test(l))return 0;
+ return 2;
+}
+const logArr=[];
+function mkLog(o){const d=document.createElement("div");if(o.l===4)d.className="err";else if(o.l>=2&&/установлено|готов|поднят|SUCCESS|✓/.test(o.t))d.className="ok";d.textContent=o.t;return d;}
+function drawLogs(){const min=LV[$("loglvl").value],box=$("logs");box.innerHTML="";
+ for(const o of logArr){if(o.l>=min)box.appendChild(mkLog(o));}
+ box.scrollTop=box.scrollHeight;}
+
+$("obfs").onclick=e=>{if(e.target.dataset.v&&!e.target.disabled)setObfs(e.target.dataset.v);};
+$("vkauth").onclick=e=>{if(e.target.dataset.v&&!e.target.disabled)setVk(e.target.dataset.v);};
+$("vklogin").onclick=()=>{api("/api/vklogin",{id:sel});toast("Открываю окно входа VK…","ok");};
+$("new").onclick=()=>{sel=null;draft=true;loadEditor({turnTcp:true,workers:9,vkAuth:"anonymous"});renderList();setLocked(false);toast("Новый профиль — заполни и сохрани.","ok");};
+$("save").onclick=async()=>{const p=await api("/api/profiles",readEditor());sel=p.id;draft=false;toast("Профиль сохранён.","ok");};
+$("impbtn").onclick=async()=>{const p=await api("/api/import",{link:$("imp").value});if(p.id){sel=p.id;draft=false;$("imp").value="";loadEditor(p);toast("Профиль импортирован.","ok");}else toast("Не удалось разобрать ссылку.","err");};
+$("exp").onclick=async()=>{const r=await api("/api/export?id="+sel);prompt("Ссылка профиля:",r.link);};
+$("go").onclick=async()=>{
+ if(isRunning()){await api("/api/disconnect");toast("Отключаюсь…","warn");return;}
+ const p=await api("/api/profiles",readEditor());sel=p.id;draft=false;await api("/api/connect",{id:p.id});
+};
+$("theme").onclick=()=>{const t=document.body.classList.contains("light")?"dark":"light";theme(t);S.settings.theme=t;api("/api/settings",S.settings);drawSpark();};
+$("quit").onclick=()=>{if(confirm("Выключить туннель и выйти?"))api("/api/quit");};
+$("s_save").onclick=()=>{S.settings.corePath=$("s_core").value;S.settings.wgPath=$("s_wg").value;S.settings.bypass=$("s_byp").value;api("/api/settings",S.settings);toast("Настройки сохранены.","ok");};
+$("cap_send").onclick=()=>{api("/api/captcha",{result:$("cap_in").value});$("cap_in").value="";$("cap").classList.remove("show");};
+$("cap_open").onclick=()=>{if(S.captchaURL)window.open(S.captchaURL);};
+$("loglvl").onchange=drawLogs;
+addEventListener("resize",drawSpark);
+
+function tick(){
+ fetch("/api/state").then(r=>r.json()).then(s=>{
+  if(s.closing){showClosed();return;}
+  if(myGen===null){myGen=s.uiGen;}else if(s.uiGen>myGen){try{window.close();}catch(e){}location.replace("about:blank");return;}
+  if(s.status==="starting"&&lastStatus==="off")spark=[];
+  lastStatus=s.status;S=s;theme(s.settings.theme||"dark");
+  $("dot").className="dot "+s.status;$("stxt").textContent=TXT[s.status]||s.status;
+  $("admin").style.display=s.admin?"none":"block";
+  $("warn").style.display=s.warn?"block":"none";$("warn").textContent=s.warn||"";
+  const run=isRunning();
+  $("go").textContent=run?"Отключить":"Подключить";$("go").className="big"+(run?" stop":"");
+  $("t_act").textContent=s.active||0;
+  $("t_target").textContent=run&&s.target?("цель "+s.target):"—";
+  $("t_sp").textContent=(s.speed||0).toFixed(2);
+  $("t_rx").textContent=(s.rx||0).toFixed(2);$("t_tx").textContent=(s.tx||0).toFixed(2);
+  spark.push(run?(s.speed||0):0);if(spark.length>70)spark.shift();drawSpark();
+  renderSteps(s);
+  if(!sel&&s.profiles.length&&!draft){sel=s.profiles[0].id;loadEditor(s.profiles[0]);}
+  renderList();setLocked(lockedNow());
+  [["s_core","corePath"],["s_wg","wgPath"],["s_byp","bypass"]].forEach(([id,k])=>{const e=$(id);if(document.activeElement!==e)e.value=s.settings[k]||"";});
+  $("cap").classList.toggle("show",!!s.captchaPending);
+ }).catch(()=>showClosed());
+}
+applyWorkersMode();renderSteps({status:"off",stage:0,failedAt:-1});drawSpark();
+tickTimer=setInterval(tick,1200);tick();
+beatTimer=setInterval(()=>{if(!dead)api("/api/beat").catch(()=>{});},3000);
+es=new EventSource("/api/logs");
+es.onmessage=e=>{const o={t:e.data,l:lvl(e.data)};logArr.push(o);if(logArr.length>600)logArr.shift();
+ if(o.l<LV[$("loglvl").value])return;
+ const box=$("logs");box.appendChild(mkLog(o));while(box.children.length>400)box.removeChild(box.firstChild);box.scrollTop=box.scrollHeight;};
+</script></body></html>
